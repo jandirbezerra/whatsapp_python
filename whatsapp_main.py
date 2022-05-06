@@ -13,7 +13,7 @@ References........: https://docs.python.org/3/howto/regex.html#regex-howto
 # Library used throughout the script
 import pandas as pd
 import datetime
-import local_functions
+import whatsapp_functions
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 
@@ -24,7 +24,7 @@ from wordcloud import WordCloud
 v_repository = pd.DataFrame(columns=['date','sender','messages','source'])
 
 # 1.2) Load all files inside subfolders
-v_list_files = local_functions.fun_map_files(['Groups','Individuals'])
+v_list_files = whatsapp_functions.fun_map_files(['Groups','Individuals'])
 
 # 1.3) Choose how far (in number of days) to do the analysis - 7(week), 30(month), 180(semester), 365(year) or a custom number.
 v_dt_from   = datetime.date.today() + datetime.timedelta(-7)
@@ -36,7 +36,7 @@ v_dt_days   = v_dt_to - v_dt_from
 #v_dt_to          = None
 
 # 1.4) Load data from files
-v_repository = local_functions.load_data_file(v_list_files)
+v_repository = whatsapp_functions.load_data_file(v_list_files)
 
 # 1.5) Check available sources and define which one should be used for statistics.
 #for idx, val in enumerate(v_repository['source'].unique().tolist()):
@@ -47,7 +47,7 @@ v_source = v_repository['source'].unique()[0]
 # In[2] CHOOSE AGGREAGATED INFO TO BE DISPLAYED - FOR A BETTER EXPERIENCE RUN EACH ONE INDIVIDUALLY 
 
 # 2.1) Show amount of messages of the senders within a period - sorted from highest to the lowest.
-v_pd = local_functions.fnc_statistic(v_repository, 1, v_source, v_dt_from)
+v_pd = whatsapp_functions.fnc_statistic(v_repository, 1, v_source, v_dt_from)
 print('Total messages by sender | ({} to {}) | past {} days'.format(v_dt_from, v_dt_to, v_dt_days.days))
 print('--------------------------------------------------------------------')
 for index, row in v_pd.iterrows():
@@ -56,7 +56,7 @@ print('\n')
 
 # 2.2) Show amount of messages by weekday from specific source and period
 v_dt_from_7 = datetime.date.today() + datetime.timedelta(-6)
-v_pd = local_functions.fnc_statistic(v_repository, 2, v_source, v_dt_from_7)
+v_pd = whatsapp_functions.fnc_statistic(v_repository, 2, v_source, v_dt_from_7)
 print('Total messages by weekday | ({} to {}) | past 7 days'.format(v_dt_from_7, v_dt_to))
 print('--------------------------------------------------------------------')
 for index, row in v_pd.iterrows():
@@ -65,7 +65,7 @@ print('\n')
 
 # 2.3) Show amount of messages by year/month from specific source on the last 365 days
 v_dt_from_365 = datetime.date.today() + datetime.timedelta(-365)
-v_pd = local_functions.fnc_statistic(v_repository, 3, v_source, v_dt_from_365)
+v_pd = whatsapp_functions.fnc_statistic(v_repository, 3, v_source, v_dt_from_365)
 v_pd = v_pd.sort_values(by=['year', 'month_number'])
 print('Total messages by month | past 12 months')
 print('----------------------------------------')
